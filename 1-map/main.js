@@ -5,8 +5,16 @@ const arr = [
   {id: 3, name: "Антон"},
 ]
 
-const unique = Array.from(new Set(arr.map(a => a.id)))
+const uniqueWithSet = Array.from(new Set(arr.map(a => a.id)))
  .map(id => {
    return arr.find(a => a.id === id)
  });
- 
+
+
+ const uniqueWithReduce = arr.reduce((acc, el) => {
+  if (acc.find((a => a.id === el.id))) {
+    return acc;
+  }
+  acc.push(el);
+  return acc;
+ }, []);
