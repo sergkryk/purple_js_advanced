@@ -9,10 +9,10 @@ function diceRoll(diceType) {
 
 
 // сделано для проверки и отслеживания результата
-const randomArr = [];
+const diceRollResults = [];
 
 for (let i = 0; i <= 100; i++) {
-  randomArr.push(diceRoll('dice5'));
+  diceRollResults.push(diceRoll('dice5'));
 }
 
 function countItems(arr) {
@@ -26,4 +26,4 @@ function countItems(arr) {
   }, {})
 }
 
-console.log(countItems(randomArr));
+console.log(countItems(diceRollResults));
