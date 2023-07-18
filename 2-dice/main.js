@@ -1,18 +1,18 @@
-function randomNumber(max) {
+function getRandomNumber(max) {
   return Math.ceil(Math.random() * max);
 }
 
-function diceRoll(diceType) {
+function rollDice(diceType) {
   const max = diceType.replace(/\D/g, '');
-  return randomNumber(max);
+  return getRandomNumber(max);
 }
 
 
 // сделано для проверки и отслеживания результата
-const diceRollResults = [];
+const results = [];
 
 for (let i = 0; i <= 100; i++) {
-  diceRollResults.push(diceRoll('dice5'));
+  results.push(rollDice('dice5'));
 }
 
 function countItems(arr) {
@@ -26,4 +26,4 @@ function countItems(arr) {
   }, {})
 }
 
-console.log(countItems(diceRollResults));
+console.log(countItems(results));
