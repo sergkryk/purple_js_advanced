@@ -12,9 +12,11 @@ const uniqueWithSet = Array.from(new Set(arr.map(a => a.id)))
 
 
  const uniqueWithReduce = arr.reduce((acc, el) => {
-  if (acc.find((a => a.id === el.id))) {
+  if (acc.some(item => item.id === el.id)) {
     return acc;
   }
   acc.push(el);
   return acc;
  }, []);
+
+ console.log(uniqueWithReduce);
