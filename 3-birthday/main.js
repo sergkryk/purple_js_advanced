@@ -1,7 +1,7 @@
-function isAdult(personBirthday, min_age = 14) {
+function isAdult(personBirthday, minAge = 14) {
   const today = new Date();
   const [year, month, date] = personBirthday.split("-");
-  const personIsAdultAt = new Date(Number(year) + min_age, Number(month) - 1, date);
+  const personIsAdultAt = new Date(Number(year) + minAge, Number(month) - 1, date);
   return today.getTime() > personIsAdultAt.getTime();
 }
 
