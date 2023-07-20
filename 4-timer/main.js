@@ -1,11 +1,12 @@
+const MONTHS_IN_YEAR = 12;
+const DAYS_IN_DECEMBER = 31;
+
 function monthLeft() {
-  const MONTHS_IN_YEAR = 12;
   const currentMonth = new Date().getMonth() + 1;
   return MONTHS_IN_YEAR - currentMonth;
 }
 
 function daysLeft() {
-  const DAYS_IN_DECEMBER = 31;
   const currentDay = new Date().getDate();
   return DAYS_IN_DECEMBER - currentDay;
 }
