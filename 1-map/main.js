@@ -50,12 +50,16 @@ function isShallowEqual(obj1, obj2) {
   return true;
 }
 
+function isShallowEqualViaJson(obj1, obj2) {
+  return JSON.stringify(obj1) === JSON.stringify(obj2);
+}
+
 // функция проверки массива объектов 
 function getUniqueObjects(arr) {
   return arr.reduce((acc, el) => {
     if (
       acc.some((accEl) => {
-        return isShallowEqual(accEl, el);
+        return isShallowEqualViaJson(accEl, el);
       })
     ) {
       return acc;
