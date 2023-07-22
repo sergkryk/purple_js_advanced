@@ -3,15 +3,56 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Новогодний таймер</title>
+  <title>Final countdown</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     h1 {
       text-align: center;
     }
+
     p {
       font-size: 48px;
       line-height: 54px;
       text-align: center;
+    }
+
+    form {
+      display: flex;
+      flex-flow: column nowrap;
+      align-items: center;
+      gap: 10px;
+    }
+
+    button:disabled {
+      pointer-events: none;
+      opacity: 0.2;
+    }
+
+    form label {
+      font-size: 24px;
+      line-height: 28px;
+    }
+
+    form input {
+      min-width: 260px;
+      font-size: 24px;
+      line-height: 28px;
+      padding: 10px;
+    }
+
+    form button {
+      min-width: 260px;
+      background-color: lightsalmon;
+      padding: 10px;
+      border: none;
+      border-radius: 10px;
+      color: #ffffff;
+      font-weight: 500;
+
+      text-transform: uppercase;
     }
     #app {
       max-width: 1024px;
@@ -21,7 +62,14 @@
 </head>
 <body>
   <main>
-    <div id="app"></div>
+    <div id="app">
+      <h1>Обратный отчёт</h1>
+      <form action="">
+        <label for="date">Введите дату</label>
+        <input type="date" name="date" id="date" required>
+        <button type="submit">СТАРТ</button>
+      </form>
+    </div>
   </main>
   <script src="main.js"></script>
 </body>
