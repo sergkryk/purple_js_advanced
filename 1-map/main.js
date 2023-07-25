@@ -69,4 +69,10 @@ function getUniqueObjects(arr) {
   }, []);
 }
 
+function getUniqueObjectsV2(arr) {
+  return Array.from(new Set(arr.map(el => JSON.stringify(el)))).map(el => JSON.parse(el));
+}
+
 console.log(getUniqueObjects(sample2));
+
+console.log(getUniqueObjectsV2(sample2));
