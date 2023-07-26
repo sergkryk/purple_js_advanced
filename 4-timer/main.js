@@ -1,18 +1,41 @@
-// честно украденная функция из интернета для склонения в русском языке
-normalizeСountForm = (number, words_arr) => {
-  number = Math.abs(number);
-  if (Number.isInteger(number)) {
-    let options = [2, 0, 1, 1, 1, 2];
-    const result =
-      words_arr[
-        number % 100 > 4 && number % 100 < 20
-          ? 2
-          : options[number % 10 < 5 ? number % 10 : 5]
-      ];
-    return `${number} ${result}`;
-  }
-  return `${number} ${words_arr[1]}`;
-};
+const pr = new Intl.PluralRules("ru-RU");
+
+const secondPlural = new Map([
+  ["one", "секунда"],
+  ["few", "секунды"],
+  ["many", "секунд"],
+]);
+const minutePlural = new Map([
+  ["one", "минута"],
+  ["few", "минуты"],
+  ["many", "минут"],
+]);
+const hourPlural = new Map([
+  ["one", "час"],
+  ["few", "часа"],
+  ["many", "часов"],
+]);
+const dayPlural = new Map([
+  ["one", "день"],
+  ["few", "дня"],
+  ["many", "дней"],
+]);
+const monthPlural = new Map([
+  ["one", "месяц"],
+  ["few", "месяца"],
+  ["many", "месяцев"],
+]);
+const yearPlural = new Map([
+  ["one", "год"],
+  ["few", "года"],
+  ["many", "лет"],
+]);
+
+function formatPlural(num, plurals) {
+  const rule = pr.select(num);
+  const suffix = plurals.get(rule);
+  return `${num} ${suffix}`;
+}
 
 // считаю часы и минуты до следующих суток
 function getTimeUntillNextDay() {
@@ -28,20 +51,10 @@ function getTimeUntillNextDay() {
   const minutes = Math.floor((diff / 1000 / 60) % 60);
   const seconds = Math.floor((diff / 1000) % 60);
 
-  const normalizedHours =
-    hours === 0
-      ? ""
-      : normalizeСountForm(hours, ["час", "часа", "часов"]);
-  const normalizedMinutes =
-    minutes === 0
-      ? ""
-      : normalizeСountForm(minutes, ["минута", "минуты", "минут"]);
-  const normalizedSeconds =
-    seconds === 0
-      ? "0 секунд"
-      : normalizeСountForm(seconds, ["секунда", "секунды", "секунд"]);
-
-  return `${normalizedHours} ${normalizedMinutes} ${normalizedSeconds}`;
+  return `${formatPlural(hours, hourPlural)} ${formatPlural(
+    minutes,
+    minutePlural
+  )} ${formatPlural(seconds, secondPlural)}`;
 }
 
 // считаю года, месяца и дни до окончания таймера
@@ -82,20 +95,19 @@ function getDaysUntilDeadline(deadline) {
 
   counter.years = counter.years + (deadlineYear - currentYear);
 
-  const normalizedYears =
-    counter.years === 0
+  return `${
+    formatPlural(counter.years, yearPlural) === "0 лет"
       ? ""
-      : normalizeСountForm(counter.years, ["год", "года", "лет"]);
-  const normalizedMonths =
-    counter.months === 0
+      : formatPlural(counter.years, yearPlural)
+  } ${
+    formatPlural(counter.months, monthPlural) === "0 месяцев"
       ? ""
-      : normalizeСountForm(counter.months, ["месяц", "месяца", "месяцев"]);
-  const normalizedDays =
-    counter.days === 0
+      : formatPlural(counter.months, monthPlural)
+  } ${
+    formatPlural(counter.days, dayPlural) === "0 дней"
       ? ""
-      : normalizeСountForm(counter.days, ["день", "дня", "дней"]);
-
-  return `${normalizedYears} ${normalizedMonths} ${normalizedDays}`;
+      : formatPlural(counter.days, dayPlural)
+  }`;
 }
 
 function renderCounterElement(deadline) {
@@ -106,7 +118,9 @@ function renderCounterElement(deadline) {
       p.textContent = "Отсчёт закончен";
       return;
     }
-    p.textContent = `${getDaysUntilDeadline(deadline)} ${getTimeUntillNextDay()}`;
+    p.textContent = `${getDaysUntilDeadline(
+      deadline
+    )} ${getTimeUntillNextDay()}`;
   }, 1000);
   return p;
 }
@@ -114,20 +128,15 @@ function renderCounterElement(deadline) {
 const form = document.querySelector("form");
 const app = document.querySelector("#app");
 
-form.addEventListener("submit", (evt) => {
-  evt.preventDefault();
+form.addEventListener("submit", (event) => {
+  event.preventDefault();
   const data = new FormData(form);
-  const formData = {};
-  for (const [key, value] of data) {
-    formData[key] = value;
-  }
-  const [year, month, date] = formData?.date.split("-");
-  const deadline = new Date(year, Number(month) - 1, date);
+  const deadline = new Date(data.get("date"));
   if (deadline.getTime() <= new Date().getTime()) {
-    alert("Установите дату больше текущей")
+    alert("Установите дату больше текущей");
   } else {
-    form.querySelector('button[type=submit]').setAttribute("disabled", true)
-    form.querySelector('input[type=date]').setAttribute("disabled", true)
+    form.querySelector("button[type=submit]").setAttribute("disabled", true);
+    form.querySelector("input[type=date]").setAttribute("disabled", true);
     const counter = renderCounterElement(deadline);
     app.appendChild(counter);
   }
