@@ -96,15 +96,15 @@ function getDaysUntilDeadline(deadline) {
   counter.years = counter.years + (deadlineYear - currentYear);
 
   return `${
-    formatPlural(counter.years, yearPlural) === "0 лет"
+    counter.years === 0
       ? ""
       : formatPlural(counter.years, yearPlural)
   } ${
-    formatPlural(counter.months, monthPlural) === "0 месяцев"
+    counter.months === 0
       ? ""
       : formatPlural(counter.months, monthPlural)
   } ${
-    formatPlural(counter.days, dayPlural) === "0 дней"
+    counter.days === 0
       ? ""
       : formatPlural(counter.days, dayPlural)
   }`;
