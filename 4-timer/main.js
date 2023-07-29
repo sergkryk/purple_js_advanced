@@ -1,4 +1,4 @@
-const pr = new Intl.PluralRules("ru-RU");
+const pluralRules = new Intl.PluralRules("ru-RU");
 
 const secondPlural = new Map([
   ["one", "секунда"],
@@ -32,7 +32,7 @@ const yearPlural = new Map([
 ]);
 
 function formatPlural(num, plurals) {
-  const rule = pr.select(num);
+  const rule = pluralRules.select(num);
   const suffix = plurals.get(rule);
   return `${num} ${suffix}`;
 }
