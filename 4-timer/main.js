@@ -1,40 +1,25 @@
+const secondPlural = ["секунда", "секунды", "секунд"];
+const minutePlural = ["минута", "минуты", "минут"];
+const hourPlural = ["час", "часа", "часов"];
+const dayPlural = ["день", "дня", "дней"];
+const monthPlural = ["месяц", "месяца", "месяцев"];
+const yearPlural = ["год", "года", "лет"];
+
 const pluralRules = new Intl.PluralRules("ru-RU");
 
-const secondPlural = new Map([
-  ["one", "секунда"],
-  ["few", "секунды"],
-  ["many", "секунд"],
-]);
-const minutePlural = new Map([
-  ["one", "минута"],
-  ["few", "минуты"],
-  ["many", "минут"],
-]);
-const hourPlural = new Map([
-  ["one", "час"],
-  ["few", "часа"],
-  ["many", "часов"],
-]);
-const dayPlural = new Map([
-  ["one", "день"],
-  ["few", "дня"],
-  ["many", "дней"],
-]);
-const monthPlural = new Map([
-  ["one", "месяц"],
-  ["few", "месяца"],
-  ["many", "месяцев"],
-]);
-const yearPlural = new Map([
-  ["one", "год"],
-  ["few", "года"],
-  ["many", "лет"],
-]);
-
 function formatPlural(num, plurals) {
+  const [one, few, many] = plurals;
   const rule = pluralRules.select(num);
-  const suffix = plurals.get(rule);
-  return `${num} ${suffix}`;
+  const cases = {
+    one,
+    few,
+    many,
+  };
+  if (rule in cases) {
+    return `${num} ${cases[rule]}`;
+  } else {
+    return `${num} ${cases.one}`
+  }
 }
 
 // считаю часы и минуты до следующих суток
@@ -96,17 +81,9 @@ function getDaysUntilDeadline(deadline) {
   counter.years = counter.years + (deadlineYear - currentYear);
 
   return `${
-    counter.years === 0
-      ? ""
-      : formatPlural(counter.years, yearPlural)
-  } ${
-    counter.months === 0
-      ? ""
-      : formatPlural(counter.months, monthPlural)
-  } ${
-    counter.days === 0
-      ? ""
-      : formatPlural(counter.days, dayPlural)
+    counter.years === 0 ? "" : formatPlural(counter.years, yearPlural)
+  } ${counter.months === 0 ? "" : formatPlural(counter.months, monthPlural)} ${
+    counter.days === 0 ? "" : formatPlural(counter.days, dayPlural)
   }`;
 }
 
