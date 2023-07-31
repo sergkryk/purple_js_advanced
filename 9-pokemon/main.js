@@ -19,7 +19,7 @@ function pokemonResponseHandler() {
     const { ability } = abilities[0];
     if ("url" in ability) {
       const abilityRequest = makeHttpRequest(ability.url);
-      abilityRequest.addEventListener("load", abilityResponseHandler)
+      abilityRequest.addEventListener("load", abilityResponseHandler);
     }
   }
 }
