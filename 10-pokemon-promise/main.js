@@ -1,6 +1,18 @@
-const URL = "https://pokeapi.co/api/v2/pokemon/ditto";
+"use strict";
 
-function getData(url, errorMessage) {
+const URL = "https://pokeapi.co/api/v2/pokemon";
+
+function consoleData(data) {
+  console.log(data);
+}
+function alertData(data) {
+  alert(data);
+}
+function doSomethingWithData(data) {
+  console.log(`I am doing something with the ${data}`);
+}
+
+function getData(url, errorMessage = "Что-то пошло не так") {
   return fetch(url).then((response) => {
     if (!response.ok) {
       throw new Error(errorMessage);
@@ -9,22 +21,25 @@ function getData(url, errorMessage) {
   });
 }
 
-const pokemon = getData(URL, "Не удалось получить данные о покемоне");
+function sendRequest(url, responseHandler, errorMessage) {
+  return getData(url, errorMessage).then(
+    responseHandler
+  );
+}
 
-function pokemonResolve(data) {
-  const { abilities } = data;
+function parsePokemonAbility(response) {
+  const { abilities } = response;
   if (abilities.length && abilities.length > 0) {
-    const { ability } = abilities[0];
-    if ("url" in ability) {
-      getData(ability.url, "Не удалось получить данные о способности").then(response => {
-        console.log(response);
-      });
-    }
+    const [{ ability }] = abilities;
+    return ability;
   }
 }
 
-function pokemonReject(error) {
-  console.log(error);
+function getPokemonAbility(pokemonName, pokemonAbilityHandler) {
+  sendRequest(`${URL}/${pokemonName}`, parsePokemonAbility, `Не удалось получить данные о ${pokemonName}`)
+    .then((ability) => sendRequest(ability?.url, pokemonAbilityHandler), "Не удалось получить данные о способности");
 }
 
-pokemon.then(pokemonResolve, pokemonReject);
+getPokemonAbility("ditto", consoleData);
+getPokemonAbility("pikachu", alertData);
+getPokemonAbility("torchic", doSomethingWithData);
