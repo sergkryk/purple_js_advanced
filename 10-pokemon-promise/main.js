@@ -22,9 +22,7 @@ function getData(url, errorMessage = "Что-то пошло не так") {
 }
 
 function sendRequest(url, responseHandler, errorMessage) {
-  return getData(url, errorMessage).then(
-    responseHandler
-  );
+  return getData(url, errorMessage).then(responseHandler);
 }
 
 function parsePokemonAbility(response) {
@@ -36,8 +34,16 @@ function parsePokemonAbility(response) {
 }
 
 function getPokemonAbility(pokemonName, pokemonAbilityHandler) {
-  sendRequest(`${URL}/${pokemonName}`, parsePokemonAbility, `Не удалось получить данные о ${pokemonName}`)
-    .then((ability) => sendRequest(ability?.url, pokemonAbilityHandler), "Не удалось получить данные о способности");
+  sendRequest(
+    `${URL}/${pokemonName}`,
+    parsePokemonAbility,
+    `Не удалось получить данные о ${pokemonName}`
+  )
+    .then(
+      (ability) => sendRequest(ability?.url, pokemonAbilityHandler),
+      "Не удалось получить данные о способности"
+    )
+    .catch((error) => console.log(error.message));
 }
 
 getPokemonAbility("ditto", consoleData);
