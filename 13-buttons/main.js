@@ -1,5 +1,5 @@
 const DEFAULT_TEXT = "Нажми меня";
-const PRESSED_TEXT = "Нажато";
+const PRESSED_TEXT = "Нажата!";
 const buttonsParentNode = document.querySelector(".counter__buttons");
 const counterNode = document.querySelector(".counter__count");
 
