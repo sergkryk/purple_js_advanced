@@ -12,6 +12,20 @@ function doSomethingWithData(data) {
   console.log(`I am doing something with the ${data}`);
 }
 
+// я так понимаю дополнительная обертка в виде промиса не нужна т.к. fetch и так возвращает промис
+
+// function getData(url, errorMessage = "Что-то пошло не так") {
+//   return new Promise((resolve, reject) => {
+//     fetch(url).then((response) => {
+//       if (!response.ok) {
+//         reject(new Error(errorMessage))
+//       } else {
+//         resolve(response.json())
+//       }
+//     })
+//   })
+// }
+
 function getData(url, errorMessage = "Что-то пошло не так") {
   return fetch(url).then((response) => {
     if (!response.ok) {
@@ -19,10 +33,6 @@ function getData(url, errorMessage = "Что-то пошло не так") {
     }
     return response.json();
   });
-}
-
-function sendRequest(url, responseHandler, errorMessage) {
-  return getData(url, errorMessage).then(responseHandler);
 }
 
 function parsePokemonAbility(response) {
@@ -33,19 +43,25 @@ function parsePokemonAbility(response) {
   }
 }
 
-function getPokemonAbility(pokemonName, pokemonAbilityHandler) {
-  sendRequest(
-    `${URL}/${pokemonName}`,
-    parsePokemonAbility,
-    `Не удалось получить данные о ${pokemonName}`
-  )
-    .then(
-      (ability) => sendRequest(ability?.url, pokemonAbilityHandler),
-      "Не удалось получить данные о способности"
-    )
+function getPokemonDetails(name) {
+  return getData(
+    `${URL}/${name}`,
+    `Не удалось получить данные о ${name}`
+  );
+}
+
+function getAbilityDetails(ability) {
+  const { url } = ability;
+  return getData(url, "Не удалось получить данные о способности");
+}
+
+function getPokemonAbility(pokemonName) {
+  return getPokemonDetails(pokemonName)
+    .then(parsePokemonAbility)
+    .then(getAbilityDetails)
     .catch((error) => console.log(error.message));
 }
 
-getPokemonAbility("ditto", consoleData);
-getPokemonAbility("pikachu", alertData);
-getPokemonAbility("torchic", doSomethingWithData);
+getPokemonAbility("ditto").then(consoleData);
+getPokemonAbility("pikachu").then(alertData);
+getPokemonAbility("torchic").then(doSomethingWithData);
