@@ -1,0 +1,25 @@
+{
+  "name": "purple_js_advanced",
+  "version": "1.0.0",
+  "description": "educational project",
+  "main": "./15-build/bundle.js",
+  "scripts": {
+    "start": "live-server ./15-build",
+    "build": "rollup ./15-build/index.js --file ./15-build/bundle.js --format iife",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sergkryk/purple_js_advanced.git"
+  },
+  "author": "sergkryk",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sergkryk/purple_js_advanced/issues"
+  },
+  "homepage": "https://github.com/sergkryk/purple_js_advanced#readme",
+  "devDependencies": {
+    "live-server": "^1.2.2",
+    "rollup": "^3.27.2"
+  }
+}
